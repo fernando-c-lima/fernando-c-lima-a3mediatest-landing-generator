@@ -1,0 +1,44 @@
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkoutLinks = Array.from(document.querySelectorAll('a')).filter(link =>
+      link.href.includes('/click/')
+    );
+
+    checkoutLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const checkoutUrl = this.href;
+
+        // Extrair o rtkcid da URL atual da página
+        const urlParams = new URLSearchParams(window.location.search);
+        const rtkcid = urlParams.get('rtkcid');
+
+        if (!rtkcid) {
+          console.error('RTKCID não encontrado na URL da página.');
+          window.location.href = checkoutUrl; // Redirecionar mesmo assim
+          return;
+        }
+        
+        const postbackUrl = `https://zr7pm.ttrk.io/postback?format=img&type=InitiateCheckout&clickid=${rtkcid}`;
+
+        const img = new Image();
+
+        img.onload = function () {
+          window.location.href = checkoutUrl; 
+        };
+
+        img.onerror = function () {
+          console.warn('Falha ao carregar o pixel de tracking.');
+          window.location.href = checkoutUrl; 
+        };
+
+        img.src = postbackUrl;
+
+        setTimeout(() => {
+          if (window.location.href !== checkoutUrl) {
+            window.location.href = checkoutUrl;
+          }
+        }, 1000);
+      });
+    });
+  });

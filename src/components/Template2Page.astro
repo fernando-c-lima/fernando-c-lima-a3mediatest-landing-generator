@@ -1,0 +1,15 @@
+---
+const { title, content, videoLink, buttonText } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+    <h1>{title}</h1>
+    <div>{content}</div>
+    <a href={videoLink} target="_blank">{buttonText}</a>
+  </body>
+</html>
