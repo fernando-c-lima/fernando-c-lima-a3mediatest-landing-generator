@@ -56,7 +56,7 @@ http://localhost:4321
 - Todas as edições feitas pelo TinaCMS são refletidas diretamente no site.
 - O projeto foi desenvolvido com foco em performance, organização e legibilidade do código.
 
-## 🧞 Observações
+## 🧞 Informações dos Arquivos Gerados
 
  - Se quiser testar a criação das 1000 cópias de cada template, exclua as pastas em src/content/paginatemplate1 e src/content/paginatemplate2 e rode o comando:
 ```bash
