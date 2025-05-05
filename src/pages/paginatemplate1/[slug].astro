@@ -1,0 +1,134 @@
+---
+import client from '../../../tina/__generated__/client';
+import Template1Page from '../../../tina/pages/Template1Page.tsx';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BaseHead from '../../components/BaseHead.astro'; 
+
+export async function getStaticPaths() {
+   try {
+    const template1 = await client.queries.template1Connection({ first: 1000 });
+
+  
+    return template1.data.template1Connection.edges.map((edge) => ({
+      params: { slug: edge.node._sys.filename },
+      props: { relativePath: edge.node._sys.filename + '.json' },
+    }));
+
+  } catch (error) {
+    console.error("Erro na consulta:", error);
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
+  }
+}
+
+const { slug } = Astro.params;
+const { relativePath } = Astro.props;
+
+
+const data = await client.queries.template1({ relativePath });
+
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+     <BaseHead title={data?.data?.template1?.title || "Página Template 1"} description="Página gerada pelo Template 1" />
+  </head>
+  <body>
+   
+   <main class="template1-main">
+    {data?.data?.template1 ? (
+        <div>
+        <p class="description">{data.data.template1.description}</p>
+          <h1>{data.data.template1.title}</h1>
+          <p>
+            <img src="/template1.png" alt="Imagem do Template 1" style="max-width: 100%; height: auto; margin-bottom: 1rem;" />
+          </p>
+
+          <button class="button" onClick={() => window.open(data.data.template1.url, '_blank')}>
+            {data.data.template1.buttonText}
+          </button>
+          
+          <div>
+            <h2>Conteúdo:</h2>
+            {data.data.template1.content?.children?.map((child, index) => (
+              <p key={index}>{child.children[0]?.text}</p> // Renderizando o conteúdo como texto
+            ))}
+          </div>
+
+          <button class="button" onClick={() => window.open(data.data.template1.url, '_blank')}>
+            {data.data.template1.buttonText}
+          </button>
+        </div>
+      ) : (
+        <p>Erro: Dados não encontrados.</p>
+      )}
+    </main>
+    <Footer template="template1" />
+  </body>
+</html>
+
+<style>
+.template1-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.template1-main h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #000; 
+}
+
+.template1-main p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: left;
+}
+
+.template1-main button.button {
+  display: inline-block;
+  padding: 0.9rem 2.1rem;
+  margin: 0.5rem 0;
+  background-color: #28a745; 
+  color: #fff;
+  font-weight:bold;
+  font-size: 0.9em;
+  text-decoration: none;
+  border-radius: 6px; 
+  border: none; 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.template1-main button.button:hover {
+  background-color: #218838; 
+}
+
+.template1-main h2 {
+  margin-top: 2rem;
+  font-size: 1.8rem;
+  color: #444;
+}
+
+.description{
+  margin-left:2em;
+}
+
+.template1-main p.description {
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: var(--tw-leading, var(--text-sm--line-height));
+  margin-top: -0.5rem;
+  color: #333;
+}
+
+</style>

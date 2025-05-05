@@ -1,0 +1,90 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import client from '../../../tina/__generated__/client';
+
+const template1 = await client.queries.template1Connection({ first: 1000 });
+
+const sortedEdges = [...template1.data.template1Connection.edges].sort((a, b) => {
+  const numA = parseInt(a.node._sys.filename, 10);
+  const numB = parseInt(b.node._sys.filename, 10);
+  return numA - numB;
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Template 1" description="Lista de páginas do Template 1" />
+  </head>
+  <body>
+    <Header />
+    <main class="template1-main">
+      <h1>Template 1</h1>
+      <ul class="links-list">
+        {sortedEdges.map((edge) => (
+          <li class="link-item">
+            <a href={`/paginatemplate1/${edge.node._sys.filename}`} class="link">
+              Página {edge.node._sys.filename}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .links-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 40px; 
+    justify-items: center;
+    max-width: 100%; 
+  }
+
+  .link-item {
+    width: 100%;
+    max-width: 120px; 
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .link {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .link-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .link:hover {
+    background-color: #ADD8E6;
+    color: #fff;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #333;
+  }
+</style>

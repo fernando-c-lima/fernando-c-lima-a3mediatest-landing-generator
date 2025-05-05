@@ -1,0 +1,193 @@
+---
+import client from '../../../tina/__generated__/client';
+import Template2Page from '../../../tina/pages/Template2Page.tsx';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BaseHead from '../../components/BaseHead.astro';
+
+export async function getStaticPaths() {
+  const template2 = await client.queries.template2Connection({ first: 1000 });
+  return template2.data.template2Connection.edges.map((edge) => ({
+    params: { slug: edge.node._sys.filename },
+    props: { relativePath: edge.node._sys.relativePath },
+  }));
+}
+
+const { slug } = Astro.params;
+const { relativePath } = Astro.props;
+
+const data = await client.queries.template2({ relativePath });
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+     <BaseHead title={data?.data?.template2?.title || "Página Template 2"} description="Página gerada pelo Template 2" />
+  </head>
+  <body>
+    <Header template={data?.data?.template2 ? "template2" : "template1"} />
+    <main class="template2-main">
+     {data?.data?.template2 ? (
+        <div class="content-container">
+          <h2 class="subtitulo">{data.data.template2.title}</h2>
+
+          <div className="video-container">
+            <iframe
+              width="900"
+              height="495"
+              src="https://www.youtube.com/embed/EYtqxwv3iIA"  // Substitua com o link correto do vídeo
+              title="YouTube video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style="margin-left: -5rem;"
+            ></iframe>
+          </div>
+
+          <div class="imagem-container">
+            <img src="/1kit.png" alt="Imagem do kit1" class="template-imagem" />
+          </div>
+          <div class="imagem-container">
+            <img src="/garantia.png" alt="Imagem da garantia" class="template-imagem" />
+          </div>
+          <div class="button-container">
+            <img src="/buy.png" alt="Imagem comprar" class="button-imagem" />
+          </div>
+          <p class="buy">{data.data.template2.description}</p>
+          <div class="imagem-container">
+            <img src="/1kit.png" alt="Imagem do kit1" class="template-imagem" />
+          </div>
+          <p class="descricao">{data.data.template2.description}</p>
+          <div></div>
+          <div class="imagem-container">
+            <img src="/template2.png" alt="Imagem do Template 2" class="template-logos" />
+          </div>
+        </div>
+        
+        <div class="conteudo">
+          {data.data.template2.content?.children?.map((child, index) => (
+            <p key={index} class="conteudo-item">
+              - {child.children[0]?.text}
+            </p>   // Renderizando o conteúdo como texto
+          ))}
+        </div>
+      ) : (
+        <p>Erro: Dados não encontrados.</p>
+      )}
+    </main>
+    <Footer template="template2" />
+  </body>
+</html>
+
+<style>
+
+  .subtitulo {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1rem;
+    margin-top: -2rem;
+    text-align: center; 
+  }
+
+
+  .descricao {
+    font-size: 1rem;
+    color: #555;
+    text-align: center; 
+  }
+
+
+  .botao {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background-color: #28a745; 
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+  }
+
+  .conteudo {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .conteudo h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .conteudo-item {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .video-link {
+    font-size: 1rem;
+    color: #0066cc;
+    text-decoration: none;
+    margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  .video-container {
+    display: flex;
+    justify-content: flex-start; 
+    margin: 4rem auto;
+    width: 100%;
+    max-width: 900px;
+    padding-left: 3rem;        
+  }
+
+  .video-container iframe {
+    width: 100%;
+    max-width: 840px; 
+    aspect-ratio: 16 / 9; 
+    border: none;
+  }
+
+  .imagem-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .template-imagem {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 8px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .button-imagem {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+  }
+
+  .buy {
+    text-align: center;
+    font-size: 43px;
+    font-weight: 700;
+    line-height: 1.267em;
+    letter-spacing: 0px;
+    color: #138636;
+    margin-bottom: 35px;
+    margin-top: 0;
+  }
+
+  .template-logos {
+    max-width: 1400px;
+    border-radius: 8px;
+  }
+</style>
