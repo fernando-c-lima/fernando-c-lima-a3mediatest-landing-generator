@@ -32,6 +32,8 @@ export default defineConfig({
   // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
   schema: {
     collections: [
+      PageCollection,
+      BlogCollection,
       GlobalConfigCollection,
       Template1Collection, // Atualize para Template1Collection
       Template2Collection, // Atualize para Template2Collection
