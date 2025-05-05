@@ -1,0 +1,35 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import client from '../../tina/__generated__/client';
+
+// Buscando as páginas dos templates
+const template1 = await client.queries.template1Connection();
+const template2 = await client.queries.template2Connection();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Teste A3 Media" description="Veja os templates e suas páginas." />
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <h1>Veja os templates e suas páginas.</h1>
+      <p>Este projeto usa Astro + TinaCMS para transformar páginas de funil de concorrentes em templates dinâmicos. A partir desses templates, são geradas 1000 cópias personalizadas (com conteúdos únicos gerados no CMS) que refletem diretamente no site, mostrando como o TinaCMS gerencia e atualiza as páginas em tempo real.</p>
+      <div class="templates-container">
+        <h2>
+          <a href="/paginatemplate1">Template 1</a>
+        </h2>
+        <h2>
+          <a href="/paginatemplate2">Template 2</a>
+        </h2>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

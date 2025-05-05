@@ -1,0 +1,86 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+import config from "../content/config/config.json";
+import IconLink from "./react/IconLink";
+const { template } = Astro.props;
+---
+
+<header class={template === 'template2' ? 'template2-header' : ''}>
+
+  {!template && (
+    <nav>
+      <div class="teste-header">
+        <h1>Teste A3</h1>
+      </div>
+    </nav>
+  )}
+</header>
+
+<style>
+header {
+  margin: 0;
+  padding: 0 1em;
+  background: white;
+  box-shadow: 0 2px 8px rgba(var(--black), 5%);
+  align-items: center;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1em;
+}
+
+h2 a,
+h2 a.active {
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav a {
+  padding: 1em 0.5em;
+  color: var(--black);
+  border-bottom: 4px solid transparent;
+  text-decoration: none;
+}
+
+nav a.active {
+  text-decoration: none;
+  border-bottom-color: var(--accent);
+}
+
+.social-links,
+.social-links a {
+  display: flex;
+}
+
+@media (max-width: 720px) {
+  .social-links {
+    display: none;
+  }
+}
+
+.template-label {
+  text-align: center;
+  font-weight: bold;
+  margin: 0.5em 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+header.template2-header {
+  background: #d9877c;
+  min-height: 5px;
+  padding: 0; 
+  box-shadow: none; 
+}
+</style>

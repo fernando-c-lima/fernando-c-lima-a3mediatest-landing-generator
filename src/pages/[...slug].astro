@@ -1,0 +1,53 @@
+---
+import client from "../../tina/__generated__/client";
+import Template1Page from "../../tina/pages/Template1Page.tsx";
+import Template2Page from "../../tina/pages/Template2Page.tsx";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import BaseHead from "../components/BaseHead.astro";
+
+export async function getStaticPaths() {
+  const template1 = await client.queries.template1Connection();
+  const template2 = await client.queries.template2Connection();
+
+  const template1Paths = template1.data?.template1Connection?.edges?.map((edge) => ({
+    params: { slug: edge.node?.template1_id?.toString() },
+    props: {
+      collection: "template1",
+      relativePath: edge.node?._sys?.relativePath,
+    },
+  })) || [];
+
+  const template2Paths = template2.data?.template2Connection?.edges?.map((edge) => ({
+    params: { slug: edge.node?.template2_id?.toString() },
+    props: {
+      collection: "template2",
+      relativePath: edge.node?._sys?.relativePath,
+    },
+  })) || [];
+
+  return [...template1Paths, ...template2Paths];
+}
+
+const { collection, relativePath } = Astro.props;
+let data;
+
+if (collection === "template1") {
+  data = await client.queries.template1({ relativePath });
+} else if (collection === "template2") {
+  data = await client.queries.template2({ relativePath });
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={data?.data?.title || "Página"} description="Página gerada pelo TinaCMS" />
+  </head>
+  <body>
+    <Header />
+    {collection === "template1" && data?.data && <Template1Page {...data} client:tina />}
+    {collection === "template2" && data?.data && <Template2Page {...data} client:tina />}
+    <Footer />
+  </body>
+</html>
