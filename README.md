@@ -63,10 +63,3 @@ http://localhost:4321
 node --loader ts-node/esm scripts/seed-template-content.ts
 ```
 
-
-
-
-## 👀 Want to learn more?
-
-Veja [TinaCMS documentation](https://tina.io/docs) e [Astro documentation](https://docs.astro.build) ou pule para [TinaCMS Discord server](https://discord.gg/cG2UNREu).
-
