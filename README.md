@@ -34,6 +34,10 @@ Se estiver usando *npm*:
 npm install
 ```
 
+Se estiver usando *yarn*:
+```bash
+yarn install
+```
 ### 3. Inicie o projeto localmente:
 
 ```bash
